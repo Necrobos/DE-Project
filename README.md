@@ -1,4 +1,4 @@
 # DE-Project
 В этом репозитории файлы и видео о моём проекте связанном с ETL и работой с витринами с использованием оркестратора airflow
 
-//Ссылка на все видео: https://disk.yandex.ru/client/disk/DE%20videos
+Ссылка на все видео: https://disk.yandex.ru/d/ZBaObD7cx9wzPA

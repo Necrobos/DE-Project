@@ -103,6 +103,14 @@ with DAG(
         sql = 'CALL del_dubl_rd_product_info()'
     )
 
+    alter_tables_pr_keys = PostgresOperator(
+        task_id = 'alter_tables_pr_keys',
+        postgres_conn_id = 'pg-conn-dwh',
+        sql ="""ALTER TABLE rd.product ADD PRIMARY KEY (product_rk, effective_from_date);
+                ALTER TABLE rd.deal_info ADD PRIMARY KEY (deal_rk, effective_from_date);
+                ALTER TABLE dm.dict_currency ADD PRIMARY KEY (currency_cd, currency_name);"""
+    )
+
     insert_rd_deal = PostgresOperator(
         task_id = 'insert_rd_deal',
         postgres_conn_id = 'pg-conn-dwh',
@@ -138,4 +146,4 @@ with DAG(
     
     start >> trunc_stage >> [deal_info, product_info, dict_currency] >> split1 >> \
     [del_dubl_stage_deal_info, del_dubl_stage_product_info, del_dubl_rd_deal_info, del_dubl_rd_product_info] >> \
-    split2 >> [insert_rd_deal, insert_product_info, insert_dict_currency] >> build_prototype_2_2
+    alter_tables_pr_keys >> [insert_rd_deal, insert_product_info, insert_dict_currency] >> build_prototype_2_2
